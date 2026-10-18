@@ -1,0 +1,67 @@
+@model BaoCaoDanhGia
+@{ ViewData["Title"] = "Đánh giá chất lượng AI"; }
+
+<h3 class="mb-1">Đánh giá chất lượng chatbot</h3>
+<p class="text-muted">
+    Chạy bộ câu hỏi mẫu (file <code>Eval/cauhoi_mau.json</code>) để đo: (1) phân loại intent và định tuyến, so sánh bộ quy tắc từ khóa với LLM;
+    (2) truy xuất đúng đoạn tài liệu trong top 3, so sánh BM25 với truy xuất lai (BM25 + embedding).
+</p>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form asp-action="Chay" method="post" class="d-flex flex-wrap align-items-center gap-3">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="dungLlm" name="dungLlm" value="true" checked="@((bool)ViewBag.ChatSan)" disabled="@(!(bool)ViewBag.ChatSan)" />
+                <label class="form-check-label" for="dungLlm">Chạy cả LLM (tốn khoảng 26 lượt gọi API)</label>
+            </div>
+            <button class="btn btn-dark">Chạy đánh giá</button>
+            <span class="small text-muted">
+                LLM: @((bool)ViewBag.ChatSan ? "sẵn sàng" : "chưa cấu hình") · Embedding: @((bool)ViewBag.EmbSan ? "sẵn sàng" : "chưa cấu hình")
+            </span>
+        </form>
+    </div>
+</div>
+
+@if (Model != null)
+{
+    <div class="table-responsive mb-4">
+        <table class="table bg-white align-middle" style="max-width: 760px">
+            <thead class="table-light"><tr><th>Chỉ số</th><th>Kết quả</th></tr></thead>
+            <tbody>
+                <tr><td>Intent đúng, bộ quy tắc</td><td>@Model.IntentQuyTac</td></tr>
+                <tr><td>Intent đúng, LLM</td><td>@Model.IntentLlm</td></tr>
+                <tr><td>Định tuyến đúng (DB / tài liệu), bộ quy tắc</td><td>@Model.RouterQuyTac</td></tr>
+                <tr><td>Định tuyến đúng (DB / tài liệu), LLM</td><td>@Model.RouterLlm</td></tr>
+                <tr><td>Truy xuất đúng trong top 3, chỉ BM25</td><td>@Model.HitBm25</td></tr>
+                <tr><td>Truy xuất đúng trong top 3, lai BM25 + embedding</td><td>@Model.HitHybrid</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-hover bg-white align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Câu hỏi</th><th>Intent kỳ vọng</th><th>Quy tắc</th><th>LLM</th>
+                    <th class="text-center">Router (QT)</th><th class="text-center">Router (LLM)</th>
+                    <th class="text-center">BM25</th><th class="text-center">Lai</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.Dong)
+                {
+                    <tr>
+                        <td>@r.Cau</td>
+                        <td><code>@r.IntentKyVong</code></td>
+                        <td class="@(r.QuyTacDungIntent ? "text-success" : "text-danger")"><code>@r.IntentQuyTac</code></td>
+                        <td class="@(r.LlmDungIntent == true ? "text-success" : "text-danger")"><code>@r.IntentLlm</code></td>
+                        <td class="text-center">@(r.QuyTacDungRouter ? "✔" : "✘")</td>
+                        <td class="text-center">@(r.LlmDungRouter == null ? "-" : r.LlmDungRouter == true ? "✔" : "✘")</td>
+                        <td class="text-center">@(r.HitBm25 == null ? "-" : r.HitBm25 == true ? "✔" : "✘")</td>
+                        <td class="text-center">@(r.HitHybrid == null ? "-" : r.HitHybrid == true ? "✔" : "✘")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -1,0 +1,30 @@
+@model LoginVm
+@{ ViewData["Title"] = "Đăng nhập"; }
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h4 class="mb-3">Đăng nhập</h4>
+                <form asp-action="Login" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+                    <div class="mb-3">
+                        <label asp-for="TenDangNhap" class="form-label"></label>
+                        <input asp-for="TenDangNhap" class="form-control" autofocus />
+                        <span asp-validation-for="TenDangNhap" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="MatKhau" class="form-label"></label>
+                        <input asp-for="MatKhau" type="password" class="form-control" />
+                        <span asp-validation-for="MatKhau" class="text-danger"></span>
+                    </div>
+                    <button class="btn btn-dark w-100">Đăng nhập</button>
+                </form>
+            </div>
+        </div>
+        <div class="small text-muted mt-3">
+            Tài khoản mẫu (mật khẩu 123456): <b>nv1</b>, <b>nv2</b>, <b>nv3</b> (nhân viên),
+            <b>ql</b> (quản lý), <b>ns</b> (nhân sự).
+        </div>
+    </div>
+</div>

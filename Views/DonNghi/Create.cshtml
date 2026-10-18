@@ -1,0 +1,45 @@
+@model DonNghiVm
+@{ ViewData["Title"] = "Tạo đơn xin nghỉ"; }
+
+<h3 class="mb-3">Tạo đơn xin nghỉ</h3>
+<div class="card shadow-sm" style="max-width: 640px">
+    <div class="card-body">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+            <div class="mb-3">
+                <label asp-for="Loai" class="form-label"></label>
+                <select asp-for="Loai" class="form-select">
+                    @foreach (var l in Enum.GetValues<LoaiNghi>())
+                    {
+                        <option value="@l">@l.Ten()</option>
+                    }
+                </select>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="TuNgay" class="form-label"></label>
+                    <input asp-for="TuNgay" type="date" class="form-control" />
+                    <span asp-validation-for="TuNgay" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="DenNgay" class="form-label"></label>
+                    <input asp-for="DenNgay" type="date" class="form-control" />
+                    <span asp-validation-for="DenNgay" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="LyDo" class="form-label"></label>
+                <textarea asp-for="LyDo" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="LyDo" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="TepDinhKem" class="form-label"></label>
+                <input asp-for="TepDinhKem" type="file" accept=".jpg,.jpeg,.png,.pdf" class="form-control" />
+                <div class="form-text">Ví dụ: giấy khám bệnh, giấy chứng sinh, giấy đăng ký kết hôn. Tối đa 10 MB.</div>
+                <span asp-validation-for="TepDinhKem" class="text-danger"></span>
+            </div>
+            <button class="btn btn-dark">Gửi đơn</button>
+            <a asp-action="Index" class="btn btn-link">Hủy</a>
+        </form>
+    </div>
+</div>

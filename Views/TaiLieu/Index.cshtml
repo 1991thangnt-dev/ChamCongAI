@@ -1,0 +1,56 @@
+@model List<TaiLieuHang>
+@{ ViewData["Title"] = "Tài liệu chính sách"; }
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="m-0">Kho tài liệu chính sách</h3>
+    <form asp-action="TaoEmbedding" method="post">
+        <button class="btn btn-outline-dark" @(((bool)ViewBag.EmbSan) ? "" : "disabled")>Tạo embedding cho các đoạn còn thiếu</button>
+    </form>
+</div>
+
+@if (!(bool)ViewBag.EmbSan)
+{
+    <div class="alert alert-secondary">
+        Chưa cấu hình embedding (Ai:Embedding:ApiKey trong appsettings.json). Chatbot vẫn hoạt động bằng BM25;
+        khi có embedding, truy xuất sẽ chuyển sang chế độ lai (BM25 + ngữ nghĩa).
+    </div>
+}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form asp-action="Upload" method="post" enctype="multipart/form-data" class="row g-2 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label">Tiêu đề (tùy chọn)</label>
+                <input name="tieuDe" class="form-control" />
+            </div>
+            <div class="col-md-5">
+                <label class="form-label">File (.txt, .md, .pdf)</label>
+                <input type="file" name="tep" accept=".txt,.md,.pdf" class="form-control" required />
+            </div>
+            <div class="col-md-3"><button class="btn btn-dark w-100">Tải lên và nạp vào kho</button></div>
+        </form>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover bg-white align-middle">
+        <thead class="table-light"><tr><th>Tài liệu</th><th>File</th><th class="text-end">Số đoạn</th><th class="text-end">Có embedding</th><th>Ngày tải</th><th></th></tr></thead>
+        <tbody>
+            @foreach (var t in Model)
+            {
+                <tr>
+                    <td><a asp-action="Xem" asp-route-id="@t.Id">@t.TieuDe</a></td>
+                    <td>@t.TenFile</td>
+                    <td class="text-end">@t.SoDoan</td>
+                    <td class="text-end">@t.SoEmbedding / @t.SoDoan</td>
+                    <td>@t.NgayTai.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        <form asp-action="Xoa" asp-route-id="@t.Id" method="post" onsubmit="return confirm('Xóa tài liệu này?');">
+                            <button class="btn btn-sm btn-outline-danger">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

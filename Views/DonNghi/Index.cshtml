@@ -1,0 +1,69 @@
+@model List<DonNghi>
+@{
+    ViewData["Title"] = "Đơn xin nghỉ";
+    int userId = ViewBag.UserId;
+    bool laNguoiDuyet = User.IsInRole(VaiTro.QuanLy) || User.IsInRole(VaiTro.NhanSu);
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="m-0">Đơn xin nghỉ</h3>
+    <a asp-action="Create" class="btn btn-dark">Tạo đơn mới</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover bg-white align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Nhân viên</th><th>Loại nghỉ</th><th>Thời gian</th><th class="text-end">Số ngày</th>
+                <th>Lý do</th><th>Trạng thái</th><th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var d in Model)
+            {
+                <tr>
+                    <td>@d.NguoiDung.HoTen</td>
+                    <td>@d.Loai.Ten()</td>
+                    <td>@d.TuNgay.ToString("dd/MM/yyyy") &rarr; @d.DenNgay.ToString("dd/MM/yyyy")</td>
+                    <td class="text-end">@d.SoNgay</td>
+                    <td>
+                        @d.LyDo
+                        @if (!string.IsNullOrEmpty(d.TepDinhKem))
+                        {
+                            <div><a asp-action="TepDinhKem" asp-route-id="@d.Id" target="_blank" class="small">Giấy tờ: @d.TenTepGoc</a></div>
+                        }
+                    </td>
+                    <td>
+                        <span class="badge bg-@d.TrangThai.Mau()">@d.TrangThai.Ten()</span>
+                        @if (d.TrangThai == TrangThaiDon.TuChoi)
+                        {
+                            <div class="small text-danger">@d.LyDoTuChoi</div>
+                        }
+                        @if (d.NguoiDuyet != null)
+                        {
+                            <div class="small text-muted">bởi @d.NguoiDuyet.HoTen</div>
+                        }
+                    </td>
+                    <td style="min-width: 260px">
+                        @if (laNguoiDuyet && d.TrangThai == TrangThaiDon.ChoDuyet && d.NguoiDungId != userId)
+                        {
+                            <div class="d-flex gap-2">
+                                <form asp-action="Duyet" asp-route-id="@d.Id" method="post">
+                                    <button class="btn btn-sm btn-success">Duyệt</button>
+                                </form>
+                                <form asp-action="TuChoi" asp-route-id="@d.Id" method="post" class="d-flex gap-1">
+                                    <input name="lyDo" class="form-control form-control-sm" placeholder="Lý do từ chối" required />
+                                    <button class="btn btn-sm btn-outline-danger text-nowrap">Từ chối</button>
+                                </form>
+                            </div>
+                        }
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="7" class="text-center text-muted py-4">Chưa có đơn nào.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,43 @@
+@model List<ChatLog>
+@{ ViewData["Title"] = "Nhật ký chatbot"; }
+
+<h3 class="mb-1">Nhật ký xử lý chatbot</h3>
+<p class="text-muted">100 câu hỏi gần nhất, kèm intent, nhánh xử lý, nguồn tài liệu và dữ liệu DB đã dùng.</p>
+
+<div class="table-responsive">
+    <table class="table table-hover bg-white align-middle">
+        <thead class="table-light">
+            <tr><th>Thời gian</th><th>Người hỏi</th><th>Câu hỏi</th><th>Intent</th><th>Nhánh</th><th class="text-end">ms</th><th></th></tr>
+        </thead>
+        <tbody>
+            @foreach (var l in Model)
+            {
+                <tr>
+                    <td class="text-nowrap">@l.ThoiGian.ToString("dd/MM HH:mm:ss")</td>
+                    <td>@l.NguoiDung.HoTen</td>
+                    <td>@l.CauHoi</td>
+                    <td><code>@l.Intent</code> <span class="badge bg-light text-dark border">@l.NguonPhanTich</span></td>
+                    <td>@l.Nhanh</td>
+                    <td class="text-end">@l.ThoiGianMs</td>
+                    <td>
+                        <details>
+                            <summary class="small text-primary" style="cursor: pointer">Chi tiết</summary>
+                            <div class="small mt-2" style="white-space: pre-wrap; min-width: 320px">
+<b>Viết lại:</b> @l.CauHoiVietLai
+<b>Thực thể:</b> @l.ThucThe
+<b>Nguồn tài liệu:</b> @l.NguonTaiLieu
+<b>Dữ liệu DB:</b> @l.DuLieuDb
+<b>Trả lời:</b> @l.CauTraLoi
+@if (!string.IsNullOrEmpty(l.Loi)) { <span class="text-danger"><b>Lỗi:</b> @l.Loi</span> }
+                            </div>
+                        </details>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="7" class="text-center text-muted py-4">Chưa có câu hỏi nào.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>

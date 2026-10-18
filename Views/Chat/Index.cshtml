@@ -1,0 +1,132 @@
+@{ ViewData["Title"] = "Trợ lý nhân sự"; }
+
+<div class="row">
+    <div class="col-lg-9 mx-auto">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <b>Trợ lý chấm công và nghỉ phép</b>
+                <span class="small">
+                    @if ((bool)ViewBag.ChatSan)
+                    {
+                        <span class="badge bg-success">AI chat: bật</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary" title="Điền API key trong appsettings.json">AI chat: chưa cấu hình (chế độ quy tắc)</span>
+                    }
+                    @if ((bool)ViewBag.EmbSan)
+                    {
+                        <span class="badge bg-success">Embedding: bật</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Embedding: tắt (chỉ BM25)</span>
+                    }
+                </span>
+            </div>
+            <div id="khungChat" class="card-body" style="height: 60vh; overflow-y: auto"></div>
+            <div class="card-footer bg-white">
+                <div class="d-flex gap-2">
+                    <input id="oNhap" class="form-control" placeholder="Hỏi về ngày phép, đi trễ, chế độ thai sản..." autocomplete="off" />
+                    <button id="nutGui" class="btn btn-dark">Gửi</button>
+                </div>
+                <div class="mt-2 small text-muted">
+                    Thử hỏi:
+                    <a href="#" class="goiY">Tôi còn bao nhiêu ngày phép?</a> ·
+                    <a href="#" class="goiY">Tháng này tôi đi trễ mấy lần?</a> ·
+                    <a href="#" class="goiY">Vợ sinh con thì chồng được nghỉ mấy ngày?</a> ·
+                    <a href="#" class="goiY">Tôi còn 3 ngày phép, giờ cưới thì có bị trừ vào phép không?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.AntiForgeryToken()
+
+<script>
+(function () {
+    const khung = document.getElementById('khungChat');
+    const o = document.getElementById('oNhap');
+    const nut = document.getElementById('nutGui');
+    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+    const lichSu = [];
+
+    function them(vaiTro, text, cacBuoc, nguon) {
+        const wrap = document.createElement('div');
+        wrap.className = 'mb-3 d-flex ' + (vaiTro === 'user' ? 'justify-content-end' : 'justify-content-start');
+        const b = document.createElement('div');
+        b.className = 'p-2 rounded ' + (vaiTro === 'user' ? 'bg-dark text-white' : 'bg-light border');
+        b.style.maxWidth = '85%';
+        b.style.whiteSpace = 'pre-wrap';
+        b.textContent = text;
+
+        if (nguon && nguon.length) {
+            const n = document.createElement('div');
+            n.className = 'small text-muted mt-2';
+            n.textContent = 'Nguồn: ' + nguon.join('; ');
+            b.appendChild(n);
+        }
+        if (cacBuoc && cacBuoc.length) {
+            const d = document.createElement('details');
+            d.className = 'mt-2 small text-muted';
+            const s = document.createElement('summary');
+            s.textContent = 'Xem các bước xử lý';
+            d.appendChild(s);
+            cacBuoc.forEach(function (x) {
+                const p = document.createElement('div');
+                p.className = 'mt-2';
+                const t = document.createElement('b');
+                t.textContent = x.ten;
+                p.appendChild(t);
+                const c = document.createElement('div');
+                c.style.whiteSpace = 'pre-wrap';
+                c.textContent = x.chiTiet;
+                p.appendChild(c);
+                d.appendChild(p);
+            });
+            b.appendChild(d);
+        }
+        wrap.appendChild(b);
+        khung.appendChild(wrap);
+        khung.scrollTop = khung.scrollHeight;
+        return wrap;
+    }
+
+    async function gui() {
+        const q = o.value.trim();
+        if (!q) return;
+        o.value = '';
+        them('user', q);
+        const cho = them('assistant', 'Đang xử lý...');
+        nut.disabled = true;
+        try {
+            const r = await fetch('@Url.Action("Hoi", "Chat")', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': token },
+                body: JSON.stringify({ cauHoi: q, lichSu: lichSu.slice(-6) })
+            });
+            if (!r.ok) throw new Error('Lỗi máy chủ (' + r.status + ')');
+            const d = await r.json();
+            cho.remove();
+            them('assistant', d.traLoi, d.cacBuoc, d.nguon);
+            lichSu.push({ vaiTro: 'user', noiDung: q });
+            lichSu.push({ vaiTro: 'assistant', noiDung: d.traLoi });
+        } catch (e) {
+            cho.remove();
+            them('assistant', 'Có lỗi: ' + e.message);
+        } finally {
+            nut.disabled = false;
+            o.focus();
+        }
+    }
+
+    nut.addEventListener('click', gui);
+    o.addEventListener('keydown', function (e) { if (e.key === 'Enter') gui(); });
+    document.querySelectorAll('.goiY').forEach(function (a) {
+        a.addEventListener('click', function (e) { e.preventDefault(); o.value = a.textContent; gui(); });
+    });
+
+    them('assistant', 'Xin chào! Tôi có thể tra cứu số ngày phép, thống kê chấm công, trạng thái đơn nghỉ và giải đáp quy định của công ty. Bạn cần hỗ trợ gì?');
+})();
+</script>

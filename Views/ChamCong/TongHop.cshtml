@@ -1,0 +1,43 @@
+@model List<TongHopDongVm>
+@{
+    ViewData["Title"] = "Tổng hợp chấm công";
+    DateTime thang = ViewBag.Thang;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="m-0">Tổng hợp chấm công tháng @thang.ToString("MM/yyyy")</h3>
+    <form method="get" class="d-flex gap-2">
+        <input type="month" name="thang" value="@thang.ToString("yyyy-MM")" class="form-control" />
+        <button class="btn btn-outline-dark">Xem</button>
+    </form>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover bg-white align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Nhân viên</th><th>Phòng ban</th><th class="text-end">Có mặt</th>
+                <th class="text-end">Nghỉ phép</th><th class="text-end">Vắng</th>
+                <th class="text-end">Đi trễ (lần / phút)</th><th class="text-end">Về sớm (lần / phút)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>@r.NhanVien.HoTen</td>
+                    <td>@r.NhanVien.PhongBan</td>
+                    <td class="text-end">@r.ThongKe.SoNgayCoMat / @r.ThongKe.SoNgayLamTheoLich</td>
+                    <td class="text-end">@r.ThongKe.SoNgayNghiCoPhep</td>
+                    <td class="text-end">@r.ThongKe.SoNgayVangKhongPhep</td>
+                    <td class="text-end">@r.ThongKe.SoLanDiTre / @r.ThongKe.TongPhutDiTre</td>
+                    <td class="text-end">@r.ThongKe.SoLanVeSom / @r.ThongKe.TongPhutVeSom</td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="7" class="text-center text-muted py-3">Chưa có nhân viên nào.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>

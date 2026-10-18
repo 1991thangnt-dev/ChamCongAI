@@ -1,0 +1,193 @@
+[
+  {
+    "q": "Nghỉ thai sản được bao lâu?",
+    "intent": "CHINH_SACH",
+    "caTaiLieu": true,
+    "hamDb": [],
+    "tuKhoa": "6 thang"
+  },
+  {
+    "q": "Vợ sinh con thì chồng được nghỉ mấy ngày?",
+    "intent": "CHINH_SACH",
+    "caTaiLieu": true,
+    "hamDb": [],
+    "tuKhoa": "5 ngay lam viec"
+  },
+  {
+    "q": "Kết hôn được nghỉ mấy ngày?",
+    "intent": "CHINH_SACH",
+    "caTaiLieu": true,
+    "hamDb": [],
+    "tuKhoa": "ket hon duoc nghi 3 ngay"
+  },
+  {
+    "q": "Bố mẹ mất thì được nghỉ mấy ngày?",
+    "intent": "CHINH_SACH",
+    "caTaiLieu": true,
+    "hamDb": [],
+    "tuKhoa": "cha de"
+  },
+  {
+    "q": "Quy trình xin nghỉ phép như thế nào?",
+    "intent": "CHINH_SACH",
+    "caTaiLieu": true,
+    "hamDb": [],
+    "tuKhoa": "3 ngay lam viec"
+  },
+  {
+    "q": "Phép năm một năm được bao nhiêu ngày?",
+    "intent": "CHINH_SACH",
+    "caTaiLieu": true,
+    "hamDb": [],
+    "tuKhoa": "12 ngay phep nam"
+  },
+  {
+    "q": "Nghỉ ốm cần giấy tờ gì?",
+    "intent": "CHINH_SACH",
+    "caTaiLieu": true,
+    "hamDb": [],
+    "tuKhoa": "giay kham benh"
+  },
+  {
+    "q": "Đi trễ bao nhiêu phút thì bị tính là trễ?",
+    "intent": "CHINH_SACH",
+    "caTaiLieu": true,
+    "hamDb": [],
+    "tuKhoa": "08:05"
+  },
+  {
+    "q": "Quên chấm công thì phải làm sao?",
+    "intent": "CHINH_SACH",
+    "caTaiLieu": true,
+    "hamDb": [],
+    "tuKhoa": "2 ngay lam viec"
+  },
+  {
+    "q": "Nghỉ khám thai được mấy lần?",
+    "intent": "CHINH_SACH",
+    "caTaiLieu": true,
+    "hamDb": [],
+    "tuKhoa": "5 lan"
+  },
+  {
+    "q": "Phép năm chưa dùng hết có được bảo lưu không?",
+    "intent": "CHINH_SACH",
+    "caTaiLieu": true,
+    "hamDb": [],
+    "tuKhoa": "bao luu"
+  },
+  {
+    "q": "Con kết hôn có được nghỉ không?",
+    "intent": "CHINH_SACH",
+    "caTaiLieu": true,
+    "hamDb": [],
+    "tuKhoa": "con ket hon"
+  },
+  {
+    "q": "Nghỉ không lương tối đa bao lâu?",
+    "intent": "CHINH_SACH",
+    "caTaiLieu": true,
+    "hamDb": [],
+    "tuKhoa": "30 ngay"
+  },
+  {
+    "q": "Hồ sơ nghỉ thai sản gồm những gì?",
+    "intent": "CHINH_SACH",
+    "caTaiLieu": true,
+    "hamDb": [],
+    "tuKhoa": "giay chung sinh"
+  },
+  {
+    "q": "Tôi còn bao nhiêu ngày phép?",
+    "intent": "PHEP_CON_LAI",
+    "caTaiLieu": false,
+    "hamDb": [
+      "PHEP_CON_LAI"
+    ]
+  },
+  {
+    "q": "Năm nay tôi đã dùng bao nhiêu ngày phép rồi?",
+    "intent": "PHEP_CON_LAI",
+    "caTaiLieu": false,
+    "hamDb": [
+      "PHEP_CON_LAI"
+    ]
+  },
+  {
+    "q": "Tháng này tôi đi trễ mấy lần?",
+    "intent": "THONG_KE_CHAM_CONG",
+    "caTaiLieu": false,
+    "hamDb": [
+      "THONG_KE_CHAM_CONG"
+    ]
+  },
+  {
+    "q": "Tháng trước tôi về sớm bao nhiêu lần?",
+    "intent": "THONG_KE_CHAM_CONG",
+    "caTaiLieu": false,
+    "hamDb": [
+      "THONG_KE_CHAM_CONG"
+    ]
+  },
+  {
+    "q": "Tuần này tôi có ngày nào vắng không?",
+    "intent": "THONG_KE_CHAM_CONG",
+    "caTaiLieu": false,
+    "hamDb": [
+      "THONG_KE_CHAM_CONG"
+    ]
+  },
+  {
+    "q": "Đơn xin nghỉ của tôi đã được duyệt chưa?",
+    "intent": "TRANG_THAI_DON",
+    "caTaiLieu": false,
+    "hamDb": [
+      "DANH_SACH_DON"
+    ]
+  },
+  {
+    "q": "Tôi còn 3 ngày phép, giờ cưới thì có bị trừ vào phép không?",
+    "intent": "KET_HOP",
+    "caTaiLieu": true,
+    "hamDb": [
+      "PHEP_CON_LAI"
+    ],
+    "tuKhoa": "ket hon"
+  },
+  {
+    "q": "Tháng này tôi đi trễ 4 lần thì bị xử lý thế nào?",
+    "intent": "KET_HOP",
+    "caTaiLieu": true,
+    "hamDb": [
+      "THONG_KE_CHAM_CONG"
+    ],
+    "tuKhoa": "nhac nho"
+  },
+  {
+    "q": "Tôi muốn nghỉ thai sản, còn phép năm bao nhiêu và cần hồ sơ gì?",
+    "intent": "KET_HOP",
+    "caTaiLieu": true,
+    "hamDb": [
+      "PHEP_CON_LAI"
+    ],
+    "tuKhoa": "giay chung sinh"
+  },
+  {
+    "q": "Xin chào",
+    "intent": "CHAO_HOI",
+    "caTaiLieu": false,
+    "hamDb": []
+  },
+  {
+    "q": "Hôm nay thời tiết thế nào?",
+    "intent": "NGOAI_PHAM_VI",
+    "caTaiLieu": false,
+    "hamDb": []
+  },
+  {
+    "q": "Cho mình xin công thức nấu phở",
+    "intent": "NGOAI_PHAM_VI",
+    "caTaiLieu": false,
+    "hamDb": []
+  }
+]
